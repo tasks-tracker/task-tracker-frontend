@@ -1,0 +1,97 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Task Tracker API
+  description: Task Tracker API
+
+servers:
+  - url: /api
+
+paths:
+  /auth/register-by-login:
+    post:
+      operationId: registerByLogin
+      summary: Register by login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterByLoginRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /auth/login:
+    post:
+      operationId: login
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /auth/me:
+    get:
+      operationId: me
+      summary: Me
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/UserResponse"
+components:
+  schemas:
+    RegisterByLoginRequest:
+      type: object
+      required:
+        - login
+        - password
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+    LoginRequest:
+      type: object
+      required:
+        - login
+        - password
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        login:
+          type: string
+        registeredAt:
+          type: string
