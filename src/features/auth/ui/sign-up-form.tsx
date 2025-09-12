@@ -17,10 +17,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { $$signUpModel } from "../model/sign-up.model";
 import { signUpSchema, SignUpFormData } from "../model/schemas/sign-up.schema";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 
 export function SignUpForm() {
   const { message, error } = useUnit($$signUpModel.output);
   const { formSubmitted } = useUnit($$signUpModel.input);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -68,15 +71,39 @@ export function SignUpForm() {
               )}
             </div>
 
-            <div className="grid gap-2">
+            <div className="grid gap-2 relative flex items-center w-full">
               <Label htmlFor="password">Пароль</Label>
               <Input
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Введите пароль"
                 {...register("password")}
-                className={errors.password ? "border-red-500" : ""}
+                className={`w-full pr-10 ${errors.password ? "border-red-500" : "pr-10"}`}
               />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-2 top-1/2 -translate-y-1/5 z-20"
+              >
+                {showPassword ? (
+                  <EyeOff
+                    size={18}
+                    className={
+                      errors.password ? "text-red-500" : "text-gray-600"
+                    }
+                  />
+                ) : (
+                  <Eye
+                    size={18}
+                    className={
+                      errors.password ? "text-red-500" : "text-gray-600"
+                    }
+                  />
+                )}
+              </Button>
+
               {errors.password && (
                 <p className="text-sm text-red-500">
                   {errors.password.message}
@@ -84,14 +111,42 @@ export function SignUpForm() {
               )}
             </div>
 
-            <div className="grid gap-2">
+            <div className="grid gap-2 relative flex items-center w-full">
               <Label htmlFor="confirmPassword">Подтвердите пароль</Label>
               <Input
                 id="confirmPassword"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Подтвердите пароль"
                 {...register("confirmPassword")}
-                className={errors.confirmPassword ? "border-red-500" : ""}
+                className={`w-full pr-10 ${errors.password ? "border-red-500" : "pr-10"}`}
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-2 top-1/2 -translate-y-1/5 z-20"
+              >
+                {showPassword ? (
+                  <EyeOff
+                    size={18}
+                    className={
+                      errors.password ? "text-red-500" : "text-gray-600"
+                    }
+                  />
+                ) : (
+                  <Eye
+                    size={18}
+                    className={
+                      errors.password ? "text-red-500" : "text-gray-600"
+                    }
+                  />
+                )}
+              </Button>
+              <input
+                type="submit"
+                style={{ display: "none" }}
+                aria-hidden="true"
               />
               {errors.confirmPassword && (
                 <p className="text-sm text-red-500">
