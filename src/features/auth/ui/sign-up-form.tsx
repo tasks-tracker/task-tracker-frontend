@@ -75,39 +75,40 @@ export function SignUpForm() {
               )}
             </div>
 
-            <div className="grid gap-2 relative flex items-center w-full">
+            <div className="grid gap-2">
               <Label htmlFor="password">Пароль</Label>
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Введите пароль"
-                {...register("password")}
-                className={`w-full pr-10 ${errors.password ? "border-red-500" : "pr-10"}`}
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-2 top-1/2 -translate-y-1/5 z-20"
-              >
-                {showPassword ? (
-                  <EyeOff
-                    size={18}
-                    className={
-                      errors.password ? "text-red-500" : "text-gray-600"
-                    }
-                  />
-                ) : (
-                  <Eye
-                    size={18}
-                    className={
-                      errors.password ? "text-red-500" : "text-gray-600"
-                    }
-                  />
-                )}
-              </Button>
-
+              <div className="relative w-full">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Введите пароль"
+                  {...register("password")}
+                  className={`w-full pr-10 ${errors.password ? "border-red-500" : ""}`}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2"
+                >
+                  {showPassword ? (
+                    <EyeOff
+                      size={18}
+                      className={
+                        errors.password ? "text-red-500" : "text-gray-600"
+                      }
+                    />
+                  ) : (
+                    <Eye
+                      size={18}
+                      className={
+                        errors.password ? "text-red-500" : "text-gray-600"
+                      }
+                    />
+                  )}
+                </Button>
+              </div>
               {errors.password && (
                 <p className="text-sm text-red-500">
                   {errors.password.message}
@@ -115,43 +116,44 @@ export function SignUpForm() {
               )}
             </div>
 
-            <div className="grid gap-2 relative flex items-center w-full">
+            <div className="grid gap-2">
               <Label htmlFor="confirmPassword">Подтвердите пароль</Label>
-              <Input
-                id="confirmPassword"
-                type={showPassword ? "text" : "password"}
-                placeholder="Подтвердите пароль"
-                {...register("confirmPassword")}
-                className={`w-full pr-10 ${errors.password ? "border-red-500" : "pr-10"}`}
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-2 top-1/2 -translate-y-1/5 z-20"
-              >
-                {showPassword ? (
-                  <EyeOff
-                    size={18}
-                    className={
-                      errors.password ? "text-red-500" : "text-gray-600"
-                    }
-                  />
-                ) : (
-                  <Eye
-                    size={18}
-                    className={
-                      errors.password ? "text-red-500" : "text-gray-600"
-                    }
-                  />
-                )}
-              </Button>
-              <input
-                type="submit"
-                style={{ display: "none" }}
-                aria-hidden="true"
-              />
+              <div className="relative w-full">
+                <Input
+                  id="confirmPassword"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Подтвердите пароль"
+                  {...register("confirmPassword")}
+                  className={`w-full pr-10 ${errors.confirmPassword ? "border-red-500" : ""}`}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2"
+                >
+                  {showPassword ? (
+                    <EyeOff
+                      size={18}
+                      className={
+                        errors.confirmPassword
+                          ? "text-red-500"
+                          : "text-gray-600"
+                      }
+                    />
+                  ) : (
+                    <Eye
+                      size={18}
+                      className={
+                        errors.confirmPassword
+                          ? "text-red-500"
+                          : "text-gray-600"
+                      }
+                    />
+                  )}
+                </Button>
+              </div>
               {errors.confirmPassword && (
                 <p className="text-sm text-red-500">
                   {errors.confirmPassword.message}
