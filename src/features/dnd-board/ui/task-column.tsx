@@ -1,6 +1,6 @@
 "use client";
 
-import { TaskCard } from "./TaskCard";
+import { TaskCard } from "./task-card";
 import { Card, CardHeader, CardTitle, CardContent } from "@/shared/ui/card";
 
 interface TaskColumnProps {

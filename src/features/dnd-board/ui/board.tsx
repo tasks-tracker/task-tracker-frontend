@@ -1,6 +1,6 @@
 "use client";
 
-import { TaskColumn } from "./TaskColumn";
+import { TaskColumn } from "./task-column";
 
 const columnsData = [
   {
