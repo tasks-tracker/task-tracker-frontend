@@ -20,9 +20,7 @@ import { signUpSchema, SignUpFormData } from "../model/schemas/sign-up.schema";
 
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
-=======
 import Link from "next/link";
-
 
 export function SignUpForm() {
   const { message, error } = useUnit($$signUpModel.output);
