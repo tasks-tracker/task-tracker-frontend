@@ -17,8 +17,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { $$signInModel } from "../model/sign-in.model";
 import { signInSchema, SignInFormData } from "../model/schemas/sign-in.schema";
+
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+
+import Link from "next/link";
+
 
 export function SignInForm() {
   const { message, error } = useUnit($$signInModel.output);
@@ -50,7 +54,9 @@ export function SignInForm() {
           Введите свои данные для входа в систему
         </CardDescription>
         <CardAction>
-          <Button variant="link">Создать аккаунт</Button>
+          <Button variant="link">
+            <Link href="/sign-up">Создать аккаунт</Link>
+          </Button>
         </CardAction>
       </CardHeader>
       <CardContent>
