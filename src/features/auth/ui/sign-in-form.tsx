@@ -23,7 +23,6 @@ import { useState } from "react";
 
 import Link from "next/link";
 
-
 export function SignInForm() {
   const { message, error } = useUnit($$signInModel.output);
   const { formSubmitted } = useUnit($$signInModel.input);
@@ -76,7 +75,7 @@ export function SignInForm() {
               )}
             </div>
 
-            <div className="grid gap-2 relative flex items-center w-full">
+            <div className="grid gap-2">
               <div className="flex items-center">
                 <Label htmlFor="password">Пароль</Label>
                 <a
@@ -86,41 +85,47 @@ export function SignInForm() {
                   Забыли пароль?
                 </a>
               </div>
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Введите пароль"
-                {...register("password")}
-                className={`w-full pr-10 ${errors.password ? "border-red-500" : ""}`}
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-2 top-1/2 -translate-y-1/6 z-20"
-              >
-                {showPassword ? (
-                  <EyeOff
-                    size={18}
-                    className={
-                      errors.password ? "text-red-500" : "text-gray-600"
-                    }
-                  />
-                ) : (
-                  <Eye
-                    size={18}
-                    className={
-                      errors.password ? "text-red-500" : "text-gray-600"
-                    }
-                  />
-                )}
-              </Button>
+
+              <div className="relative w-full">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Введите пароль"
+                  {...register("password")}
+                  className={`w-full pr-10 ${errors.password ? "border-red-500" : ""}`}
+                />
+
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2"
+                >
+                  {showPassword ? (
+                    <EyeOff
+                      size={18}
+                      className={
+                        errors.password ? "text-red-500" : "text-gray-600"
+                      }
+                    />
+                  ) : (
+                    <Eye
+                      size={18}
+                      className={
+                        errors.password ? "text-red-500" : "text-gray-600"
+                      }
+                    />
+                  )}
+                </Button>
+              </div>
+
               <input
                 type="submit"
                 style={{ display: "none" }}
                 aria-hidden="true"
               />
+
               {errors.password && (
                 <p className="text-sm text-red-500">
                   {errors.password.message}
