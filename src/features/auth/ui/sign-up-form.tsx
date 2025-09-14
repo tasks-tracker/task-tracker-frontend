@@ -17,8 +17,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { $$signUpModel } from "../model/sign-up.model";
 import { signUpSchema, SignUpFormData } from "../model/schemas/sign-up.schema";
+
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+=======
+import Link from "next/link";
+
 
 export function SignUpForm() {
   const { message, error } = useUnit($$signUpModel.output);
@@ -51,7 +55,9 @@ export function SignUpForm() {
           Введите данные для создания нового аккаунта
         </CardDescription>
         <CardAction>
-          <Button variant="link">Войти</Button>
+          <Button variant="link">
+            <Link href="/sign-in">Войти</Link>
+          </Button>
         </CardAction>
       </CardHeader>
       <CardContent>
