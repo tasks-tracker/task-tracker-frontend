@@ -1,6 +1,8 @@
 "use client";
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/shared/ui/card";
+"use client";
+
+import { Card, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 
 interface TaskCardProps {
   title: string;
@@ -9,13 +11,16 @@ interface TaskCardProps {
 
 export function TaskCard({ title, description }: TaskCardProps) {
   return (
-    <Card className="p-3">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
+    <Card className="shadow-sm hover:shadow-md transition">
+      <CardHeader className="p-3 space-y-2">
+        <CardTitle className="text-base font-semibold leading-tight">
+          {title}
+        </CardTitle>
+
+        <CardDescription className="text-sm text-foreground">
+          {description}
+        </CardDescription>
       </CardHeader>
-      <CardContent>
-        <p className="text-gray-600">{description}</p>
-      </CardContent>
     </Card>
   );
 }
