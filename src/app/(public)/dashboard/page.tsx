@@ -1,5 +1,5 @@
-import { DashboardPage } from "@/features/dnd-board";
+import { Board } from "@/features/dnd-board/ui/board";
 
-export default function Page() {
-  return <DashboardPage />;
+export default function DashboardPage() {
+  return <Board />;
 }
