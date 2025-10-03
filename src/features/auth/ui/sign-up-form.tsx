@@ -90,7 +90,7 @@ export function SignUpForm() {
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
                 >
                   {showPassword ? (
                     <EyeOff
@@ -131,7 +131,7 @@ export function SignUpForm() {
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
                 >
                   {showPassword ? (
                     <EyeOff
@@ -169,13 +169,13 @@ export function SignUpForm() {
       <CardFooter className="flex-col gap-2">
         <Button
           type="submit"
-          className="w-full"
+          className="w-full cursor-pointer"
           disabled={isSubmitting}
           onClick={handleSubmit(onSubmit)}
         >
           {isSubmitting ? "Создание аккаунта..." : "Создать аккаунт"}
         </Button>
-        <Button variant="outline" className="w-full">
+        <Button variant="outline" className="w-full cursor-pointer">
           Войти через Google
         </Button>
       </CardFooter>

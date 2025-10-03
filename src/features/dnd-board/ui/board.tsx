@@ -1,48 +1,20 @@
 "use client";
 
-"use client";
-
+import { useUnit } from "effector-react";
+import { $board } from "../model/board.model";
 import { Column } from "./task-column";
-
-const columns = [
-  {
-    id: "todo",
-    title: "To Do",
-    tasks: [
-      { title: "Сверстать логин", description: "Сделать форму с валидацией" },
-      {
-        title: "Добавить регистрацию",
-        description: "Подключить zod + react-hook-form",
-      },
-    ],
-  },
-  {
-    id: "inprogress",
-    title: "In Progress",
-    tasks: [
-      { title: "Google Auth", description: "Интеграция через NextAuth" },
-      { title: "Подключить бэкенд", description: "REST API + Effector" },
-    ],
-  },
-  {
-    id: "done",
-    title: "Done",
-    tasks: [
-      {
-        title: "Создать проект",
-        description: "Next.js + Tailwind + shadcn/ui",
-      },
-      { title: "Сверстать главную", description: "Простой layout" },
-    ],
-  },
-];
+import type { ColumnType } from "@/entities/column/model/types";
 
 export function Board() {
+  const board = useUnit($board);
+
+  if (!board) return <p>Загрузка...</p>;
+
   return (
-    <main className="flex gap-4 p-6 h-[calc(100vh-64px)] overflow-x-auto">
-      {columns.map((col) => (
-        <Column key={col.id} title={col.title} tasks={col.tasks} />
+    <div className="flex gap-4 overflow-x-auto h-screen p-4">
+      {board.columns.map((column: ColumnType) => (
+        <Column key={column.id} column={column} />
       ))}
-    </main>
+    </div>
   );
 }

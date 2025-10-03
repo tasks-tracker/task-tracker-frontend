@@ -7,6 +7,7 @@
  */
 import { createInstance } from "./api-instance";
 import type { BodyType } from "./api-instance";
+
 export interface RegisterByLoginRequest {
   login: string;
   password: string;
