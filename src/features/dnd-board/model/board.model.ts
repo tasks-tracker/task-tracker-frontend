@@ -10,7 +10,7 @@ const getFullBoardFx = createEffect(async (userId: string) => {
 });
 
 $board.on(getFullBoardFx.doneData, (_, data) => data);
-
+// TODO: работаем братья
 sample({
   source: $$userModel.output.user,
   clock: $$userModel.output.user,
