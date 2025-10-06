@@ -64,6 +64,40 @@ paths:
               schema:
                 type: object
                 $ref: "#/components/schemas/UserResponse"
+  /board/get-full-board:
+    get:
+      operationId: getFullBoard
+      summary: Get full board
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/BoardResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
+
 components:
   schemas:
     RegisterByLoginRequest:
@@ -94,4 +128,91 @@ components:
         login:
           type: string
         registeredAt:
+          type: string
+    Board:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        ownerId:
+          type: string
+        createdAt:
+          type: string
+        userId:
+          type: string
+        updatedAt:
+          type: string
+    Column:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        order:
+          type: number
+        boardId:
+          type: string
+        ownerId:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        isDeleted:
+          type: boolean
+        creatorId:
+          type: string
+        tasks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Task"
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        order:
+          type: number
+        description:
+          type: string
+        columnId:
+          type: string
+        ownerId:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    BoardResponse:
+      type: object
+      properties:
+        board:
+          type: object
+          $ref: "#/components/schemas/Board"
+        columns:
+          type: array
+          items:
+            $ref: "#/components/schemas/Column"
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        statusCode:
+          type: number
+        timestamp:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        statusCode:
+          type: number
+        timestamp:
           type: string
