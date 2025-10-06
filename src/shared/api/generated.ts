@@ -23,6 +23,56 @@ export interface UserResponse {
   registeredAt?: string;
 }
 
+export interface Board {
+  id?: string;
+  title?: string;
+  ownerId?: string;
+  createdAt?: string;
+  userId?: string;
+  updatedAt?: string;
+}
+
+export interface Column {
+  id?: string;
+  title?: string;
+  order?: number;
+  boardId?: string;
+  ownerId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  isDeleted?: boolean;
+  creatorId?: string;
+  tasks?: Task[];
+}
+
+export interface Task {
+  id?: string;
+  title?: string;
+  order?: number;
+  description?: string;
+  columnId?: string;
+  ownerId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface BoardResponse {
+  board?: Board;
+  columns?: Column[];
+}
+
+export interface Error {
+  message?: string;
+  statusCode?: number;
+  timestamp?: string;
+}
+
+export interface ErrorResponse {
+  message?: string;
+  statusCode?: number;
+  timestamp?: string;
+}
+
 export type RegisterByLogin200 = {
   success?: boolean;
   message?: string;
@@ -81,8 +131,23 @@ export const me = (options?: SecondParameter<typeof createInstance>) => {
   );
 };
 
+/**
+ * @summary Get full board
+ */
+export const getFullBoard = (
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  return createInstance<BoardResponse>(
+    { url: `/board/get-full-board`, method: "GET" },
+    options,
+  );
+};
+
 export type RegisterByLoginResult = NonNullable<
   Awaited<ReturnType<typeof registerByLogin>>
 >;
 export type LoginResult = NonNullable<Awaited<ReturnType<typeof login>>>;
 export type MeResult = NonNullable<Awaited<ReturnType<typeof me>>>;
+export type GetFullBoardResult = NonNullable<
+  Awaited<ReturnType<typeof getFullBoard>>
+>;

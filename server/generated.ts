@@ -24,6 +24,56 @@ export interface UserResponse {
   registeredAt?: string;
 }
 
+export interface Board {
+  id?: string;
+  title?: string;
+  ownerId?: string;
+  createdAt?: string;
+  userId?: string;
+  updatedAt?: string;
+}
+
+export interface Column {
+  id?: string;
+  title?: string;
+  order?: number;
+  boardId?: string;
+  ownerId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  isDeleted?: boolean;
+  creatorId?: string;
+  tasks?: Task[];
+}
+
+export interface Task {
+  id?: string;
+  title?: string;
+  order?: number;
+  description?: string;
+  columnId?: string;
+  ownerId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface BoardResponse {
+  board?: Board;
+  columns?: Column[];
+}
+
+export interface Error {
+  message?: string;
+  statusCode?: number;
+  timestamp?: string;
+}
+
+export interface ErrorResponse {
+  message?: string;
+  statusCode?: number;
+  timestamp?: string;
+}
+
 export type RegisterByLogin200 = {
   success?: boolean;
   message?: string;
@@ -63,6 +113,16 @@ export const me = <TData = AxiosResponse<UserResponse>>(
   return axios.get(`/auth/me`, options);
 };
 
+/**
+ * @summary Get full board
+ */
+export const getFullBoard = <TData = AxiosResponse<BoardResponse>>(
+  options?: AxiosRequestConfig,
+): Promise<TData> => {
+  return axios.get(`/board/get-full-board`, options);
+};
+
 export type RegisterByLoginResult = AxiosResponse<RegisterByLogin200>;
 export type LoginResult = AxiosResponse<Login200>;
 export type MeResult = AxiosResponse<UserResponse>;
+export type GetFullBoardResult = AxiosResponse<BoardResponse>;
