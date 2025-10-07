@@ -2,8 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { TaskCard } from "./task-card";
-import { ColumnType } from "@/entities/column/model/types";
-import { TaskType } from "@/entities/task/model/types";
+import { ColumnType, TaskType } from "@/shared/api/generated";
 
 export function Column({ column }: { column: ColumnType }) {
   return (

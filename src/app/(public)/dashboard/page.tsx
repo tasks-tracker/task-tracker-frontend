@@ -1,20 +1,19 @@
 "use client";
 
 import { useEffect } from "react";
-import { useUnit } from "effector-react";
+import { useGate, useUnit } from "effector-react";
 import { $$signInModel } from "@/features/auth";
-import { fetchBoardFx, $board } from "@/features/dnd-board/model/board.model";
+import {
+  fetchBoardFx,
+  $board,
+  DashboardGate,
+} from "@/features/dnd-board/model/board.model";
 import { Board } from "@/features/dnd-board/ui/board";
 
 export default function DashboardPage() {
-  const user = useUnit($$signInModel.output.user);
   const board = useUnit($board);
 
-  useEffect(() => {
-    if (user?.id) {
-      fetchBoardFx(user.id);
-    }
-  }, [user]);
+  useGate(DashboardGate);
 
   return (
     <div className="p-6">

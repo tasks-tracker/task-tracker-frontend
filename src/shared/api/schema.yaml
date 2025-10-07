@@ -95,3 +95,110 @@ components:
           type: string
         registeredAt:
           type: string
+    BoardType:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        owner:
+          type: string
+        ownerId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        userId:
+          type: string
+      required:
+        - id
+        - title
+        - owner
+        - ownerId
+        - createdAt
+        - updatedAt
+        - userId
+    TaskType:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        order:
+          type: integer
+        columnId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        ownerId:
+          type: string
+      required:
+        - id
+        - title
+        - description
+        - order
+        - columnId
+        - createdAt
+        - updatedAt
+        - ownerId
+    ColumnType:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        order:
+          type: integer
+        boardId:
+          type: string
+        ownerId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+        creatorId:
+          type: string
+        tasks:
+          type: array
+          items:
+            $ref: "#/components/schemas/TaskType"
+      required:
+        - id
+        - title
+        - order
+        - boardId
+        - ownerId
+        - createdAt
+        - updatedAt
+        - isDeleted
+        - creatorId
+        - tasks
+    BoardResponse:
+      type: object
+      properties:
+        board:
+          $ref: "#/components/schemas/BoardType" # ссылается на BoardType
+        columns:
+          type: array
+          items:
+            $ref: "#/components/schemas/ColumnType" # ссылается на ColumnType
+      required:
+        - board
+        - columns

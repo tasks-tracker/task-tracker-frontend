@@ -1,5 +1,5 @@
 import { createInstance } from "@/shared/api/api-instance";
-import { BoardResponse } from "../model/types";
+import { BoardResponse } from "@/shared/api/generated";
 
 export const getDefaultBoard = (userId: string) => {
   return createInstance<BoardResponse>({

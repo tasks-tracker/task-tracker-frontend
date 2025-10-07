@@ -3,7 +3,7 @@
 import { useUnit } from "effector-react";
 import { $board } from "../model/board.model";
 import { Column } from "./task-column";
-import type { ColumnType } from "@/entities/column/model/types";
+import { ColumnType } from "@/shared/api/generated";
 
 export function Board() {
   const board = useUnit($board);

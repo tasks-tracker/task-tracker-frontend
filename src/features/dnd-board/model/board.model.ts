@@ -1,6 +1,10 @@
-import { createEffect, createStore } from "effector";
+import { createEffect, createStore, sample } from "effector";
 import { getDefaultBoard } from "../api/board.api";
-import { BoardResponse } from "./types";
+import { createGate } from "effector-react";
+import { $user } from "@/entities/user";
+import { BoardResponse } from "@/shared/api/generated";
+
+export const DashboardGate = createGate();
 
 export const fetchBoardFx = createEffect(async (userId: string) => {
   return getDefaultBoard(userId);
@@ -23,4 +27,12 @@ $board.watch((board) => {
   if (board) {
     localStorage.setItem("board", JSON.stringify(board));
   }
+});
+
+sample({
+  clock: DashboardGate.open,
+  source: $user,
+  filter: (user): user is { id: string } => Boolean(user?.id),
+  fn: (user) => user!.id,
+  target: fetchBoardFx,
 });

@@ -1,13 +1,11 @@
 import { navigationTriggered } from "@/shared/lib/router-config";
 import { createEffect, createEvent, createStore, sample } from "effector";
 import { SignInFormData } from "./schemas/sign-in.schema";
-import { UserResponse } from "@/shared/api/generated";
 import { api } from "@/shared/api";
+import { $user } from "@/entities/user";
 
 const $message = createStore<string | null>(null);
 const $error = createStore<string | null>(null);
-
-export const $user = createStore<UserResponse | null>(null);
 
 const loginFx = createEffect(
   async ({ login, password }: { login: string; password: string }) => {
