@@ -10,6 +10,8 @@ const userFx = createEffect(async () => {
   return await api.me();
 });
 
+
+
 $user.on(userFx.doneData, (_, data) => data);
 
 sample({

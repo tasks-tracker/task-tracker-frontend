@@ -64,6 +64,40 @@ paths:
               schema:
                 type: object
                 $ref: "#/components/schemas/UserResponse"
+  /board/get-full-board:
+    get:
+      operationId: getFullBoard
+      summary: Get full board
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/BoardResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
+
 components:
   schemas:
     RegisterByLoginRequest:

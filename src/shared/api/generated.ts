@@ -120,8 +120,23 @@ export const me = (options?: SecondParameter<typeof createInstance>) => {
   );
 };
 
+/**
+ * @summary Get full board
+ */
+export const getFullBoard = (
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  return createInstance<BoardResponse>(
+    { url: `/board/get-full-board`, method: "GET" },
+    options,
+  );
+};
+
 export type RegisterByLoginResult = NonNullable<
   Awaited<ReturnType<typeof registerByLogin>>
 >;
 export type LoginResult = NonNullable<Awaited<ReturnType<typeof login>>>;
 export type MeResult = NonNullable<Awaited<ReturnType<typeof me>>>;
+export type GetFullBoardResult = NonNullable<
+  Awaited<ReturnType<typeof getFullBoard>>
+>;
