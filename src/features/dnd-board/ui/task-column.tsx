@@ -1,26 +1,20 @@
 "use client";
 
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { TaskCard } from "./task-card";
+import { ColumnType, TaskType } from "@/shared/api/generated";
 
-interface Task {
-  title: string;
-  description: string;
-}
-
-interface ColumnProps {
-  title: string;
-  tasks: Task[];
-}
-
-export function Column({ title, tasks }: ColumnProps) {
+export function Column({ column }: { column: ColumnType }) {
   return (
-    <div className="flex-1 min-w-[300px] max-w-[400px] bg-muted rounded-xl p-4 flex flex-col">
-      <h2 className="font-bold text-lg mb-4">{title}</h2>
-      <div className="flex-1 space-y-3 overflow-y-auto">
-        {tasks.map((task, i) => (
-          <TaskCard key={i} title={task.title} description={task.description} />
+    <Card className="w-72 flex-shrink-0 h-full flex flex-col">
+      <CardHeader>
+        <CardTitle>{column.title}</CardTitle>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-2 flex-grow overflow-y-auto">
+        {column.tasks.map((task: TaskType) => (
+          <TaskCard key={task.id} task={task} />
         ))}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

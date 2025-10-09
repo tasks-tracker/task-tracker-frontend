@@ -4,7 +4,7 @@ import { appStarted } from "@/shared/lib/init";
 import { navigationTriggered } from "@/shared/lib/router-config";
 import { createEffect, createStore, sample } from "effector";
 
-const $user = createStore<UserResponse | null>(null);
+export const $user = createStore<UserResponse | null>(null);
 
 const userFx = createEffect(async () => {
   return await api.me();

@@ -24,6 +24,43 @@ export interface UserResponse {
   registeredAt?: string;
 }
 
+export interface BoardType {
+  id: string;
+  title: string;
+  owner: string;
+  ownerId: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+}
+
+export interface TaskType {
+  id: string;
+  title: string;
+  description: string;
+  order: number;
+  columnId: string;
+  createdAt: string;
+  updatedAt: string;
+  ownerId: string;
+}
+
+export interface ColumnType {
+  id: string;
+  title: string;
+  order: number;
+  boardId: string;
+  ownerId: string;
+  createdAt: string;
+  updatedAt: string;
+  isDeleted: boolean;
+  creatorId: string;
+  tasks: TaskType[];
+}
+
+export interface BoardResponse {
+  board: BoardType;
+  columns: ColumnType[];
 export interface Board {
   id?: string;
   title?: string;

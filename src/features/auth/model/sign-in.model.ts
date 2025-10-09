@@ -2,6 +2,7 @@ import { navigationTriggered } from "@/shared/lib/router-config";
 import { createEffect, createEvent, createStore, sample } from "effector";
 import { SignInFormData } from "./schemas/sign-in.schema";
 import { api } from "@/shared/api";
+import { $user } from "@/entities/user";
 
 const $message = createStore<string | null>(null);
 const $error = createStore<string | null>(null);
@@ -13,18 +14,30 @@ const loginFx = createEffect(
   },
 );
 
+const meFx = createEffect(async () => {
+  return api.me();
+});
+
 const formSubmitted = createEvent<SignInFormData>();
 
 $message.on(loginFx.doneData, (_, { message }) => message);
 $error.on(loginFx.failData, (_, data) => data.message);
+
+$user.on(meFx.doneData, (_, user) => user);
 
 sample({
   clock: formSubmitted,
   fn: ({ login, password }) => ({ login, password }),
   target: loginFx,
 });
+
 sample({
   clock: loginFx.done,
+  target: meFx,
+});
+
+sample({
+  clock: meFx.done,
   fn: () => "/dashboard",
   target: navigationTriggered,
 });
@@ -36,5 +49,10 @@ export const $$signInModel = {
   output: {
     message: $message,
     error: $error,
+    user: $user,
   },
 };
+
+$user.watch((user) => {
+  console.log("👤 Текущий пользователь:", user);
+});

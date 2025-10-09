@@ -1,22 +1,38 @@
-import { BoardResponse, UserResponse } from "@/shared/api/generated";
 import { createEffect, createStore, sample } from "effector";
-import { api } from "@/shared/api";
-import { $$userModel } from "@/entities/user";
+import { getDefaultBoard } from "../api/board.api";
+import { createGate } from "effector-react";
+import { $user } from "@/entities/user";
+import { BoardResponse } from "@/shared/api/generated";
 
-const $board = createStore<BoardResponse | null>(null);
+export const DashboardGate = createGate();
 
-const getFullBoardFx = createEffect(async (userId: string) => {
-  return await api.getFullBoard({ params: { userId } });
+export const fetchBoardFx = createEffect(async (userId: string) => {
+  return getDefaultBoard(userId);
 });
 
-$board.on(getFullBoardFx.doneData, (_, data) => data);
-// TODO: работаем братья
+const savedBoard = (() => {
+  if (typeof window !== "undefined") {
+    const raw = localStorage.getItem("board");
+    return raw ? (JSON.parse(raw) as BoardResponse) : null;
+  }
+  return null;
+})();
+
+export const $board = createStore<BoardResponse | null>(savedBoard).on(
+  fetchBoardFx.doneData,
+  (_, board) => board,
+);
+
+$board.watch((board) => {
+  if (board) {
+    localStorage.setItem("board", JSON.stringify(board));
+  }
+});
+
 sample({
-  source: $$userModel.output.user,
-  clock: $$userModel.output.user,
-  filter: (user): user is UserResponse => user !== null,
-  fn: (user) => user?.id,
-  target: getFullBoardFx,
+  clock: DashboardGate.open,
+  source: $user,
+  filter: (user): user is { id: string } => Boolean(user?.id),
+  fn: (user) => user!.id,
+  target: fetchBoardFx,
 });
-
-export const $$boardModel = {};

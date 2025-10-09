@@ -129,22 +129,64 @@ components:
           type: string
         registeredAt:
           type: string
-    Board:
+    BoardType:
       type: object
       properties:
         id:
           type: string
         title:
           type: string
+        owner:
+          type: string
         ownerId:
           type: string
         createdAt:
           type: string
-        userId:
-          type: string
+          format: date-time
         updatedAt:
           type: string
-    Column:
+          format: date-time
+        userId:
+          type: string
+      required:
+        - id
+        - title
+        - owner
+        - ownerId
+        - createdAt
+        - updatedAt
+        - userId
+    TaskType:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        order:
+          type: integer
+        columnId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        ownerId:
+          type: string
+      required:
+        - id
+        - title
+        - description
+        - order
+        - columnId
+        - createdAt
+        - updatedAt
+        - ownerId
+    ColumnType:
       type: object
       properties:
         id:
@@ -152,15 +194,17 @@ components:
         title:
           type: string
         order:
-          type: number
+          type: integer
         boardId:
           type: string
         ownerId:
           type: string
         createdAt:
           type: string
+          format: date-time
         updatedAt:
           type: string
+          format: date-time
         isDeleted:
           type: boolean
         creatorId:
@@ -168,51 +212,27 @@ components:
         tasks:
           type: array
           items:
-            $ref: "#/components/schemas/Task"
-    Task:
-      type: object
-      properties:
-        id:
-          type: string
-        title:
-          type: string
-        order:
-          type: number
-        description:
-          type: string
-        columnId:
-          type: string
-        ownerId:
-          type: string
-        createdAt:
-          type: string
-        updatedAt:
-          type: string
+            $ref: "#/components/schemas/TaskType"
+      required:
+        - id
+        - title
+        - order
+        - boardId
+        - ownerId
+        - createdAt
+        - updatedAt
+        - isDeleted
+        - creatorId
+        - tasks
     BoardResponse:
       type: object
       properties:
         board:
-          type: object
-          $ref: "#/components/schemas/Board"
+          $ref: "#/components/schemas/BoardType" # ссылается на BoardType
         columns:
           type: array
           items:
-            $ref: "#/components/schemas/Column"
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        statusCode:
-          type: number
-        timestamp:
-          type: string
-    ErrorResponse:
-      type: object
-      properties:
-        message:
-          type: string
-        statusCode:
-          type: number
-        timestamp:
-          type: string
+            $ref: "#/components/schemas/ColumnType" # ссылается на ColumnType
+      required:
+        - board
+        - columns

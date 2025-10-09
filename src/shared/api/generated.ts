@@ -23,54 +23,43 @@ export interface UserResponse {
   registeredAt?: string;
 }
 
-export interface Board {
-  id?: string;
-  title?: string;
-  ownerId?: string;
-  createdAt?: string;
-  userId?: string;
-  updatedAt?: string;
+export interface BoardType {
+  id: string;
+  title: string;
+  owner: string;
+  ownerId: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
 }
 
-export interface Column {
-  id?: string;
-  title?: string;
-  order?: number;
-  boardId?: string;
-  ownerId?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  isDeleted?: boolean;
-  creatorId?: string;
-  tasks?: Task[];
+export interface TaskType {
+  id: string;
+  title: string;
+  description: string;
+  order: number;
+  columnId: string;
+  createdAt: string;
+  updatedAt: string;
+  ownerId: string;
 }
 
-export interface Task {
-  id?: string;
-  title?: string;
-  order?: number;
-  description?: string;
-  columnId?: string;
-  ownerId?: string;
-  createdAt?: string;
-  updatedAt?: string;
+export interface ColumnType {
+  id: string;
+  title: string;
+  order: number;
+  boardId: string;
+  ownerId: string;
+  createdAt: string;
+  updatedAt: string;
+  isDeleted: boolean;
+  creatorId: string;
+  tasks: TaskType[];
 }
 
 export interface BoardResponse {
-  board?: Board;
-  columns?: Column[];
-}
-
-export interface Error {
-  message?: string;
-  statusCode?: number;
-  timestamp?: string;
-}
-
-export interface ErrorResponse {
-  message?: string;
-  statusCode?: number;
-  timestamp?: string;
+  board: BoardType;
+  columns: ColumnType[];
 }
 
 export type RegisterByLogin200 = {
