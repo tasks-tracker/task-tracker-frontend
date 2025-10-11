@@ -5,7 +5,7 @@ info:
   description: Task Tracker API
 
 servers:
-  - url: /api
+  - url: /
 
 paths:
   /auth/register-by-login:
@@ -65,9 +65,15 @@ paths:
                 type: object
                 $ref: "#/components/schemas/UserResponse"
   /board/get-full-board:
-    get:
+    post:
       operationId: getFullBoard
       summary: Get full board
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: OK
@@ -123,12 +129,21 @@ components:
     UserResponse:
       type: object
       properties:
-        id:
+        success:
+          type: boolean
+        message:
           type: string
-        login:
+        status:
           type: string
-        registeredAt:
-          type: string
+        userInfo:
+          type: object
+          properties:
+            id:
+              type: string
+            login:
+              type: string
+            registeredAt:
+              type: string
     BoardType:
       type: object
       properties:
@@ -227,12 +242,23 @@ components:
     BoardResponse:
       type: object
       properties:
-        board:
-          $ref: "#/components/schemas/BoardType" # ссылается на BoardType
-        columns:
-          type: array
-          items:
-            $ref: "#/components/schemas/ColumnType" # ссылается на ColumnType
+        status:
+          type: string
+        message:
+          type: string
+        result:
+          type: object
+          properties:
+            board:
+              $ref: "#/components/schemas/BoardType"
+            columns:
+              type: array
+              items:
+                $ref: "#/components/schemas/ColumnType"
+          required:
+            - board
+            - columns
       required:
-        - board
-        - columns
+        - status
+        - message
+        - result
