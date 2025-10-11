@@ -1,9 +1,10 @@
 "use client";
 
-import { useUnit } from "effector-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { routerAttached } from "../../shared/lib/router-config";
+import { appStarted } from "@/shared/lib/init";
+import "@/entities/user";
 
 export function EffectorRouterProvider({
   children,
@@ -11,11 +12,11 @@ export function EffectorRouterProvider({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const attachRouter = useUnit(routerAttached);
 
   useEffect(() => {
-    attachRouter(router);
-  }, [router, attachRouter]);
+    routerAttached(router);
+    appStarted();
+  }, []);
 
   return <>{children}</>;
 }

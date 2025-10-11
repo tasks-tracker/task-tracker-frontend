@@ -3,9 +3,9 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Task } from "../model/types";
+import { TaskType } from "@/shared/api/generated";
 
-export function TaskCard({ task }: { task: Task }) {
+export function TaskCard({ task }: { task: TaskType }) {
   return (
     <Card className="shadow-sm border mb-2">
       <CardHeader className="p-2 pb-1">

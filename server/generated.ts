@@ -5,8 +5,11 @@
  * Task Tracker API
  * OpenAPI spec version: 1.0.0
  */
-import axios from "axios";
-import type { AxiosRequestConfig, AxiosResponse } from "axios";
+import axios from 'axios';
+import type {
+  AxiosRequestConfig,
+  AxiosResponse
+} from 'axios';
 
 export interface RegisterByLoginRequest {
   login: string;
@@ -18,10 +21,17 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface UserResponse {
+export type UserResponseUserInfo = {
   id?: string;
   login?: string;
   registeredAt?: string;
+};
+
+export interface UserResponse {
+  success?: boolean;
+  message?: string;
+  status?: string;
+  userInfo?: UserResponseUserInfo;
 }
 
 export interface BoardType {
@@ -58,57 +68,15 @@ export interface ColumnType {
   tasks: TaskType[];
 }
 
-export interface BoardResponse {
+export type BoardResponseResult = {
   board: BoardType;
   columns: ColumnType[];
-export interface Board {
-  id?: string;
-  title?: string;
-  ownerId?: string;
-  createdAt?: string;
-  userId?: string;
-  updatedAt?: string;
-}
-
-export interface Column {
-  id?: string;
-  title?: string;
-  order?: number;
-  boardId?: string;
-  ownerId?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  isDeleted?: boolean;
-  creatorId?: string;
-  tasks?: Task[];
-}
-
-export interface Task {
-  id?: string;
-  title?: string;
-  order?: number;
-  description?: string;
-  columnId?: string;
-  ownerId?: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
+};
 
 export interface BoardResponse {
-  board?: Board;
-  columns?: Column[];
-}
-
-export interface Error {
-  message?: string;
-  statusCode?: number;
-  timestamp?: string;
-}
-
-export interface ErrorResponse {
-  message?: string;
-  statusCode?: number;
-  timestamp?: string;
+  status: string;
+  message: string;
+  result: BoardResponseResult;
 }
 
 export type RegisterByLogin200 = {
@@ -121,45 +89,59 @@ export type Login200 = {
   message?: string;
 };
 
+export type GetFullBoardParams = {
+userId: string;
+};
+
 /**
  * @summary Register by login
  */
 export const registerByLogin = <TData = AxiosResponse<RegisterByLogin200>>(
-  registerByLoginRequest: RegisterByLoginRequest,
-  options?: AxiosRequestConfig,
-): Promise<TData> => {
-  return axios.post(`/auth/register-by-login`, registerByLoginRequest, options);
-};
+    registerByLoginRequest: RegisterByLoginRequest, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `/auth/register-by-login`,
+      registerByLoginRequest,options
+    );
+  }
 
 /**
  * @summary Login
  */
 export const login = <TData = AxiosResponse<Login200>>(
-  loginRequest: LoginRequest,
-  options?: AxiosRequestConfig,
-): Promise<TData> => {
-  return axios.post(`/auth/login`, loginRequest, options);
-};
+    loginRequest: LoginRequest, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `/auth/login`,
+      loginRequest,options
+    );
+  }
 
 /**
  * @summary Me
  */
 export const me = <TData = AxiosResponse<UserResponse>>(
-  options?: AxiosRequestConfig,
-): Promise<TData> => {
-  return axios.get(`/auth/me`, options);
-};
+     options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.get(
+      `/auth/me`,options
+    );
+  }
 
 /**
  * @summary Get full board
  */
 export const getFullBoard = <TData = AxiosResponse<BoardResponse>>(
-  options?: AxiosRequestConfig,
-): Promise<TData> => {
-  return axios.get(`/board/get-full-board`, options);
-};
+    params: GetFullBoardParams, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `/board/get-full-board`,undefined,{
+    ...options,
+        params: {...params, ...options?.params},}
+    );
+  }
 
-export type RegisterByLoginResult = AxiosResponse<RegisterByLogin200>;
-export type LoginResult = AxiosResponse<Login200>;
-export type MeResult = AxiosResponse<UserResponse>;
-export type GetFullBoardResult = AxiosResponse<BoardResponse>;
+export type RegisterByLoginResult = AxiosResponse<RegisterByLogin200>
+export type LoginResult = AxiosResponse<Login200>
+export type MeResult = AxiosResponse<UserResponse>
+export type GetFullBoardResult = AxiosResponse<BoardResponse>

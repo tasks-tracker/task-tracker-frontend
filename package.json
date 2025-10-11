@@ -7,6 +7,8 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "generate:api": "orval"
   },
   "dependencies": {
@@ -22,7 +24,6 @@
     "lucide-react": "^0.542.0",
     "next": "15.5.2",
     "next-auth": "^4.24.11",
-    "prettier": "^3.6.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.62.0",
@@ -38,6 +39,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
     "orval": "^7.11.2",
+    "prettier": "^3.6.2",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.8",
     "typescript": "^5"
