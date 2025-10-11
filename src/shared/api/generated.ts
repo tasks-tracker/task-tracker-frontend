@@ -5,8 +5,8 @@
  * Task Tracker API
  * OpenAPI spec version: 1.0.0
  */
-import { createInstance } from "./api-instance";
-import type { BodyType } from "./api-instance";
+import { createInstance } from './api-instance';
+import type { BodyType } from './api-instance';
 export interface RegisterByLoginRequest {
   login: string;
   password: string;
@@ -17,10 +17,62 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface UserResponse {
+export type UserResponseUserInfo = {
   id?: string;
   login?: string;
   registeredAt?: string;
+};
+
+export interface UserResponse {
+  success?: boolean;
+  message?: string;
+  status?: string;
+  userInfo?: UserResponseUserInfo;
+}
+
+export interface BoardType {
+  id: string;
+  title: string;
+  owner: string;
+  ownerId: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+}
+
+export interface TaskType {
+  id: string;
+  title: string;
+  description: string;
+  order: number;
+  columnId: string;
+  createdAt: string;
+  updatedAt: string;
+  ownerId: string;
+}
+
+export interface ColumnType {
+  id: string;
+  title: string;
+  order: number;
+  boardId: string;
+  ownerId: string;
+  createdAt: string;
+  updatedAt: string;
+  isDeleted: boolean;
+  creatorId: string;
+  tasks: TaskType[];
+}
+
+export type BoardResponseResult = {
+  board: BoardType;
+  columns: ColumnType[];
+};
+
+export interface BoardResponse {
+  status: string;
+  message: string;
+  result: BoardResponseResult;
 }
 
 export type RegisterByLogin200 = {
@@ -33,56 +85,67 @@ export type Login200 = {
   message?: string;
 };
 
+export type GetFullBoardParams = {
+userId: string;
+};
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-/**
+
+  /**
  * @summary Register by login
  */
 export const registerByLogin = (
-  registerByLoginRequest: BodyType<RegisterByLoginRequest>,
-  options?: SecondParameter<typeof createInstance>,
-) => {
-  return createInstance<RegisterByLogin200>(
-    {
-      url: `/auth/register-by-login`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      data: registerByLoginRequest,
+    registerByLoginRequest: BodyType<RegisterByLoginRequest>,
+ options?: SecondParameter<typeof createInstance>,) => {
+      return createInstance<RegisterByLogin200>(
+      {url: `/auth/register-by-login`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: registerByLoginRequest
     },
-    options,
-  );
-};
-
+      options);
+    }
+  
 /**
  * @summary Login
  */
 export const login = (
-  loginRequest: BodyType<LoginRequest>,
-  options?: SecondParameter<typeof createInstance>,
-) => {
-  return createInstance<Login200>(
-    {
-      url: `/auth/login`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      data: loginRequest,
+    loginRequest: BodyType<LoginRequest>,
+ options?: SecondParameter<typeof createInstance>,) => {
+      return createInstance<Login200>(
+      {url: `/auth/login`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: loginRequest
     },
-    options,
-  );
-};
-
+      options);
+    }
+  
 /**
  * @summary Me
  */
-export const me = (options?: SecondParameter<typeof createInstance>) => {
-  return createInstance<UserResponse>(
-    { url: `/auth/me`, method: "GET" },
-    options,
-  );
-};
-
-export type RegisterByLoginResult = NonNullable<
-  Awaited<ReturnType<typeof registerByLogin>>
->;
-export type LoginResult = NonNullable<Awaited<ReturnType<typeof login>>>;
-export type MeResult = NonNullable<Awaited<ReturnType<typeof me>>>;
+export const me = (
+    
+ options?: SecondParameter<typeof createInstance>,) => {
+      return createInstance<UserResponse>(
+      {url: `/auth/me`, method: 'GET'
+    },
+      options);
+    }
+  
+/**
+ * @summary Get full board
+ */
+export const getFullBoard = (
+    params: GetFullBoardParams,
+ options?: SecondParameter<typeof createInstance>,) => {
+      return createInstance<BoardResponse>(
+      {url: `/board/get-full-board`, method: 'POST',
+        params
+    },
+      options);
+    }
+  
+export type RegisterByLoginResult = NonNullable<Awaited<ReturnType<typeof registerByLogin>>>
+export type LoginResult = NonNullable<Awaited<ReturnType<typeof login>>>
+export type MeResult = NonNullable<Awaited<ReturnType<typeof me>>>
+export type GetFullBoardResult = NonNullable<Awaited<ReturnType<typeof getFullBoard>>>

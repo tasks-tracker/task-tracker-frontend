@@ -5,8 +5,11 @@
  * Task Tracker API
  * OpenAPI spec version: 1.0.0
  */
-import axios from "axios";
-import type { AxiosRequestConfig, AxiosResponse } from "axios";
+import axios from 'axios';
+import type {
+  AxiosRequestConfig,
+  AxiosResponse
+} from 'axios';
 
 export interface RegisterByLoginRequest {
   login: string;
@@ -18,10 +21,62 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface UserResponse {
+export type UserResponseUserInfo = {
   id?: string;
   login?: string;
   registeredAt?: string;
+};
+
+export interface UserResponse {
+  success?: boolean;
+  message?: string;
+  status?: string;
+  userInfo?: UserResponseUserInfo;
+}
+
+export interface BoardType {
+  id: string;
+  title: string;
+  owner: string;
+  ownerId: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+}
+
+export interface TaskType {
+  id: string;
+  title: string;
+  description: string;
+  order: number;
+  columnId: string;
+  createdAt: string;
+  updatedAt: string;
+  ownerId: string;
+}
+
+export interface ColumnType {
+  id: string;
+  title: string;
+  order: number;
+  boardId: string;
+  ownerId: string;
+  createdAt: string;
+  updatedAt: string;
+  isDeleted: boolean;
+  creatorId: string;
+  tasks: TaskType[];
+}
+
+export type BoardResponseResult = {
+  board: BoardType;
+  columns: ColumnType[];
+};
+
+export interface BoardResponse {
+  status: string;
+  message: string;
+  result: BoardResponseResult;
 }
 
 export type RegisterByLogin200 = {
@@ -34,35 +89,59 @@ export type Login200 = {
   message?: string;
 };
 
+export type GetFullBoardParams = {
+userId: string;
+};
+
 /**
  * @summary Register by login
  */
 export const registerByLogin = <TData = AxiosResponse<RegisterByLogin200>>(
-  registerByLoginRequest: RegisterByLoginRequest,
-  options?: AxiosRequestConfig,
-): Promise<TData> => {
-  return axios.post(`/auth/register-by-login`, registerByLoginRequest, options);
-};
+    registerByLoginRequest: RegisterByLoginRequest, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `/auth/register-by-login`,
+      registerByLoginRequest,options
+    );
+  }
 
 /**
  * @summary Login
  */
 export const login = <TData = AxiosResponse<Login200>>(
-  loginRequest: LoginRequest,
-  options?: AxiosRequestConfig,
-): Promise<TData> => {
-  return axios.post(`/auth/login`, loginRequest, options);
-};
+    loginRequest: LoginRequest, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `/auth/login`,
+      loginRequest,options
+    );
+  }
 
 /**
  * @summary Me
  */
 export const me = <TData = AxiosResponse<UserResponse>>(
-  options?: AxiosRequestConfig,
-): Promise<TData> => {
-  return axios.get(`/auth/me`, options);
-};
+     options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.get(
+      `/auth/me`,options
+    );
+  }
 
-export type RegisterByLoginResult = AxiosResponse<RegisterByLogin200>;
-export type LoginResult = AxiosResponse<Login200>;
-export type MeResult = AxiosResponse<UserResponse>;
+/**
+ * @summary Get full board
+ */
+export const getFullBoard = <TData = AxiosResponse<BoardResponse>>(
+    params: GetFullBoardParams, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `/board/get-full-board`,undefined,{
+    ...options,
+        params: {...params, ...options?.params},}
+    );
+  }
+
+export type RegisterByLoginResult = AxiosResponse<RegisterByLogin200>
+export type LoginResult = AxiosResponse<Login200>
+export type MeResult = AxiosResponse<UserResponse>
+export type GetFullBoardResult = AxiosResponse<BoardResponse>

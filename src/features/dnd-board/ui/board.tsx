@@ -1,34 +1,25 @@
 "use client";
 
-import { TaskColumn } from "./task-column";
+import { useGate, useUnit } from "effector-react";
+import { $$boardModel } from "../model/board.model";
+import { Column } from "./task-column";
+import { ColumnType } from "@/shared/api/generated";
 
-const columnsData = [
-  {
-    title: "To Do",
-    tasks: [
-      { id: 1, title: "Задача 1", description: "Описание задачи 1" },
-      { id: 2, title: "Задача 2", description: "Описание задачи 2" },
-    ],
-  },
-  {
-    title: "In Progress",
-    tasks: [{ id: 3, title: "Задача 3", description: "Описание задачи 3" }],
-  },
-  {
-    title: "Done",
-    tasks: [{ id: 4, title: "Задача 4", description: "Описание задачи 4" }],
-  },
-];
+export function Board() {
+  useGate($$boardModel.gates.DashboardGate);
 
-export default function DashboardPage() {
+  const { columns, isLoading } = useUnit({
+    board: $$boardModel.output.board,
+    columns: $$boardModel.output.columns,
+    isLoading: $$boardModel.effects.fetchBoardFx.pending,
+  });
+
+  if (isLoading) return <p>Загрузка...</p>;
+
   return (
-    <div className="p-6 flex gap-6">
-      {columnsData.map((column) => (
-        <TaskColumn
-          key={column.title}
-          title={column.title}
-          tasks={column.tasks}
-        />
+    <div className="flex gap-4 overflow-x-auto h-screen p-4">
+      {columns.map((column: ColumnType) => (
+        <Column key={column.id} column={column} />
       ))}
     </div>
   );

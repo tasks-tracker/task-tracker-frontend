@@ -1,5 +1,12 @@
-import { DashboardPage } from "@/features/dnd-board";
+"use client";
 
-export default function Page() {
-  return <DashboardPage />;
+import { Board } from "@/features/dnd-board/ui/board";
+
+export default function DashboardPage() {
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6 ml-4">Board</h1>
+      <Board />
+    </div>
+  );
 }

@@ -1,20 +1,18 @@
 "use client";
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/shared/ui/card";
+"use client";
 
-interface TaskCardProps {
-  title: string;
-  description: string;
-}
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { TaskType } from "@/shared/api/generated";
 
-export function TaskCard({ title, description }: TaskCardProps) {
+export function TaskCard({ task }: { task: TaskType }) {
   return (
-    <Card className="p-3">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
+    <Card className="shadow-sm border mb-2">
+      <CardHeader className="p-2 pb-1">
+        <CardTitle className="text-base">{task.title}</CardTitle>
       </CardHeader>
-      <CardContent>
-        <p className="text-gray-600">{description}</p>
+      <CardContent className="p-2 pt-0">
+        <p className="text-sm text-muted-foreground">{task.description}</p>
       </CardContent>
     </Card>
   );

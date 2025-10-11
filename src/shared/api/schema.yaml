@@ -5,7 +5,7 @@ info:
   description: Task Tracker API
 
 servers:
-  - url: /api
+  - url: /
 
 paths:
   /auth/register-by-login:
@@ -64,6 +64,46 @@ paths:
               schema:
                 type: object
                 $ref: "#/components/schemas/UserResponse"
+  /board/get-full-board:
+    post:
+      operationId: getFullBoard
+      summary: Get full board
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/BoardResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
+
 components:
   schemas:
     RegisterByLoginRequest:
@@ -89,9 +129,136 @@ components:
     UserResponse:
       type: object
       properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        status:
+          type: string
+        userInfo:
+          type: object
+          properties:
+            id:
+              type: string
+            login:
+              type: string
+            registeredAt:
+              type: string
+    BoardType:
+      type: object
+      properties:
         id:
           type: string
-        login:
+        title:
           type: string
-        registeredAt:
+        owner:
           type: string
+        ownerId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        userId:
+          type: string
+      required:
+        - id
+        - title
+        - owner
+        - ownerId
+        - createdAt
+        - updatedAt
+        - userId
+    TaskType:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        order:
+          type: integer
+        columnId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        ownerId:
+          type: string
+      required:
+        - id
+        - title
+        - description
+        - order
+        - columnId
+        - createdAt
+        - updatedAt
+        - ownerId
+    ColumnType:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        order:
+          type: integer
+        boardId:
+          type: string
+        ownerId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+        creatorId:
+          type: string
+        tasks:
+          type: array
+          items:
+            $ref: "#/components/schemas/TaskType"
+      required:
+        - id
+        - title
+        - order
+        - boardId
+        - ownerId
+        - createdAt
+        - updatedAt
+        - isDeleted
+        - creatorId
+        - tasks
+    BoardResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        result:
+          type: object
+          properties:
+            board:
+              $ref: "#/components/schemas/BoardType"
+            columns:
+              type: array
+              items:
+                $ref: "#/components/schemas/ColumnType"
+          required:
+            - board
+            - columns
+      required:
+        - status
+        - message
+        - result

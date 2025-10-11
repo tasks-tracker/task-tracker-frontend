@@ -1,16 +1,16 @@
 import { api } from "@/shared/api";
-import { UserResponse } from "@/shared/api/generated";
+import { UserResponseUserInfo } from "@/shared/api/generated";
 import { appStarted } from "@/shared/lib/init";
 import { navigationTriggered } from "@/shared/lib/router-config";
 import { createEffect, createStore, sample } from "effector";
 
-const $user = createStore<UserResponse | null>(null);
+export const $user = createStore<UserResponseUserInfo | null>(null);
 
 const userFx = createEffect(async () => {
   return await api.me();
 });
 
-$user.on(userFx.doneData, (_, data) => data);
+$user.on(userFx.doneData, (_, data) => data.userInfo);
 
 sample({
   clock: appStarted,
@@ -32,6 +32,7 @@ sample({
 export const $$userModel = {
   output: {
     user: $user,
+    fetchUser: userFx,
   },
   input: {
     userFx,
