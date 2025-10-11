@@ -1,7 +1,7 @@
-import { createEffect, createStore, sample } from "effector";
+import { createEffect, createStore, sample, createEvent } from "effector";
 import { createGate } from "effector-react";
 import { $user } from "@/entities/user";
-import { BoardResponseResult } from "@/shared/api/generated";
+import { BoardResponseResult, RenameTaskRequest } from "@/shared/api/generated";
 import { api } from "@/shared/api";
 
 // Создаем общий стор для доски
@@ -9,8 +9,11 @@ const $board = createStore<BoardResponseResult | null>(null);
 
 // Для удобства создадим маленькие сторы для колонок с задачами (это не обязательно, просто показываю что так тоже делают)
 const $columns = $board.map((board) => board?.columns || []);
+const $taskTitle = createStore<RenameTaskRequest | null>(null);
 
 const DashboardGate = createGate("DashboardGate");
+
+const taskTitleChanged = createEvent<RenameTaskRequest>();
 
 // Тут я изменил на метод из api
 const fetchBoardFx = createEffect(async (userId: string) => {
@@ -18,6 +21,15 @@ const fetchBoardFx = createEffect(async (userId: string) => {
     userId,
   });
 });
+
+const changeTaskTitleFx = createEffect(
+  async ({ taskId, newTitle }: RenameTaskRequest) => {
+    return await api.renameTask({
+      taskId,
+      newTitle,
+    });
+  },
+);
 
 // Тут прогон такой, шо
 // 1. Крче useGate это как useEffect только нужен для синхронизациии жизненного цикла компонента с эффектором,
@@ -52,6 +64,14 @@ sample({
   clock: fetchBoardFx.doneData,
   fn: (data) => data.result,
   target: $board,
+});
+
+sample({
+  clock: taskTitleChanged,
+  source: $taskTitle,
+  filter: Boolean,
+  fn: ({ newTitle, taskId }) => ({ newTitle: newTitle.trim(), taskId }),
+  target: changeTaskTitleFx,
 });
 
 // Это нужно для того чтобы можно было использовать этот модуль в других модулях или компонентах

@@ -79,6 +79,11 @@ export interface BoardResponse {
   result: BoardResponseResult;
 }
 
+export interface RenameTaskRequest {
+  taskId: string;
+  newTitle: string;
+}
+
 export type RegisterByLogin200 = {
   success?: boolean;
   message?: string;
@@ -141,7 +146,20 @@ export const getFullBoard = <TData = AxiosResponse<BoardResponse>>(
     );
   }
 
+/**
+ * @summary Rename task
+ */
+export const renameTask = <TData = AxiosResponse<BoardResponse>>(
+    renameTaskRequest: RenameTaskRequest, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `/board/task/rename`,
+      renameTaskRequest,options
+    );
+  }
+
 export type RegisterByLoginResult = AxiosResponse<RegisterByLogin200>
 export type LoginResult = AxiosResponse<Login200>
 export type MeResult = AxiosResponse<UserResponse>
 export type GetFullBoardResult = AxiosResponse<BoardResponse>
+export type RenameTaskResult = AxiosResponse<BoardResponse>
