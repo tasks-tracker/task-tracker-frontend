@@ -103,7 +103,45 @@ paths:
               schema:
                 type: object
                 $ref: "#/components/schemas/Error"
-
+  /board/task/rename:
+    post:
+      operationId: renameTask
+      summary: Rename task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RenameTaskRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/BoardResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     RegisterByLoginRequest:
@@ -262,3 +300,13 @@ components:
         - status
         - message
         - result
+    RenameTaskRequest:
+      type: object
+      properties:
+        taskId:
+          type: string
+        newTitle:
+          type: string
+      required:
+        - taskId
+        - newTitle

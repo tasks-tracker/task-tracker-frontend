@@ -75,6 +75,11 @@ export interface BoardResponse {
   result: BoardResponseResult;
 }
 
+export interface RenameTaskRequest {
+  taskId: string;
+  newTitle: string;
+}
+
 export type RegisterByLogin200 = {
   success?: boolean;
   message?: string;
@@ -145,7 +150,22 @@ export const getFullBoard = (
       options);
     }
   
+/**
+ * @summary Rename task
+ */
+export const renameTask = (
+    renameTaskRequest: BodyType<RenameTaskRequest>,
+ options?: SecondParameter<typeof createInstance>,) => {
+      return createInstance<BoardResponse>(
+      {url: `/board/task/rename`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: renameTaskRequest
+    },
+      options);
+    }
+  
 export type RegisterByLoginResult = NonNullable<Awaited<ReturnType<typeof registerByLogin>>>
 export type LoginResult = NonNullable<Awaited<ReturnType<typeof login>>>
 export type MeResult = NonNullable<Awaited<ReturnType<typeof me>>>
 export type GetFullBoardResult = NonNullable<Awaited<ReturnType<typeof getFullBoard>>>
+export type RenameTaskResult = NonNullable<Awaited<ReturnType<typeof renameTask>>>

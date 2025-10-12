@@ -6,7 +6,7 @@ import { ColumnType, TaskType } from "@/shared/api/generated";
 
 export function Column({ column }: { column: ColumnType }) {
   return (
-    <Card className="w-72 flex-shrink-0 h-full flex flex-col">
+    <Card className="w-full h-full flex flex-col">
       <CardHeader>
         <CardTitle>{column.title}</CardTitle>
       </CardHeader>
