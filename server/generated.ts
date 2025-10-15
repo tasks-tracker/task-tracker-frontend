@@ -79,9 +79,26 @@ export interface BoardResponse {
   result: BoardResponseResult;
 }
 
+export interface DeleteTaskRequest {
+  taskId: string;
+}
+
+export interface DeleteTaskResult {
+  status?: string;
+  message?: string;
+}
+
 export interface RenameTaskRequest {
   taskId: string;
   newTitle: string;
+}
+
+export interface CreateTaskRequest {
+  title: string;
+  description: string;
+  columnId: string;
+  order?: number;
+  userId: string;
 }
 
 export type RegisterByLogin200 = {
@@ -158,8 +175,34 @@ export const renameTask = <TData = AxiosResponse<BoardResponse>>(
     );
   }
 
+/**
+ * @summary Delete task
+ */
+export const deleteTask = <TData = AxiosResponse<DeleteTaskResult>>(
+    deleteTaskRequest: DeleteTaskRequest, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.delete(
+      `/board/task/delete`,{data:
+      deleteTaskRequest, ...options}
+    );
+  }
+
+/**
+ * @summary Create task
+ */
+export const createTask = <TData = AxiosResponse<BoardResponse>>(
+    createTaskRequest: CreateTaskRequest, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `/board/task/create`,
+      createTaskRequest,options
+    );
+  }
+
 export type RegisterByLoginResult = AxiosResponse<RegisterByLogin200>
 export type LoginResult = AxiosResponse<Login200>
 export type MeResult = AxiosResponse<UserResponse>
 export type GetFullBoardResult = AxiosResponse<BoardResponse>
 export type RenameTaskResult = AxiosResponse<BoardResponse>
+export type DeleteTaskResult = AxiosResponse<DeleteTaskResult>
+export type CreateTaskResult = AxiosResponse<BoardResponse>

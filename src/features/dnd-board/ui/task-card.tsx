@@ -13,8 +13,19 @@ import { Button } from "@/shared/ui/button";
 import { Modal } from "@/shared/ui-kit/modal/ui/modal";
 import { Avatar, AvatarImage } from "@/shared/ui/avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
+import { DialogClose } from "@/shared/ui/dialog";
+import { useUnit } from "effector-react";
+import { $$boardModel } from "../model/board.model";
 
 export function TaskCard({ task }: { task: TaskType }) {
+  const { deleteTask } = useUnit({
+    deleteTask: $$boardModel.output.taskDeleted,
+  });
+
+  const handleDeleteTask = () => {
+    deleteTask({ taskId: task.id });
+  };
+
   return (
     <Card className="shadow-sm border mb-2 p-2 flex flex-col gap-4 min-h-[100px]">
       <CardHeader className="p-0 flex flex-row items-start justify-between space-y-0">
@@ -68,10 +79,16 @@ export function TaskCard({ task }: { task: TaskType }) {
               />
 
               <Modal.Footer>
-                <Button variant="outline" type="button">
-                  Отмена
-                </Button>
-                <Button variant="destructive" type="button">
+                <DialogClose asChild>
+                  <Button variant="outline" type="button">
+                    Отмена
+                  </Button>
+                </DialogClose>
+                <Button
+                  variant="destructive"
+                  type="button"
+                  onClick={handleDeleteTask}
+                >
                   Удалить
                 </Button>
               </Modal.Footer>
