@@ -142,6 +142,84 @@ paths:
               schema:
                 type: object
                 $ref: "#/components/schemas/Error"
+  /board/task/delete:
+    delete:
+      operationId: deleteTask
+      summary: Delete task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteTaskRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/DeleteTaskResult"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
+  /board/task/create:
+    post:
+      operationId: createTask
+      summary: Create task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTaskRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/BoardResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     RegisterByLoginRequest:
@@ -300,6 +378,20 @@ components:
         - status
         - message
         - result
+    DeleteTaskRequest:
+      type: object
+      properties:
+        taskId:
+          type: string
+      required:
+        - taskId
+    DeleteTaskResult:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
     RenameTaskRequest:
       type: object
       properties:
@@ -310,3 +402,21 @@ components:
       required:
         - taskId
         - newTitle
+    CreateTaskRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        columnId:
+          type: string
+        order:
+          type: integer
+        userId:
+          type: string
+      required:
+        - title
+        - description
+        - columnId
+        - userId

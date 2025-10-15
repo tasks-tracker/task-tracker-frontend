@@ -75,9 +75,26 @@ export interface BoardResponse {
   result: BoardResponseResult;
 }
 
+export interface DeleteTaskRequest {
+  taskId: string;
+}
+
+export interface DeleteTaskResult {
+  status?: string;
+  message?: string;
+}
+
 export interface RenameTaskRequest {
   taskId: string;
   newTitle: string;
+}
+
+export interface CreateTaskRequest {
+  title: string;
+  description: string;
+  columnId: string;
+  order?: number;
+  userId: string;
 }
 
 export type RegisterByLogin200 = {
@@ -164,8 +181,38 @@ export const renameTask = (
       options);
     }
   
+/**
+ * @summary Delete task
+ */
+export const deleteTask = (
+    deleteTaskRequest: BodyType<DeleteTaskRequest>,
+ options?: SecondParameter<typeof createInstance>,) => {
+      return createInstance<DeleteTaskResult>(
+      {url: `/board/task/delete`, method: 'DELETE',
+      headers: {'Content-Type': 'application/json', },
+      data: deleteTaskRequest
+    },
+      options);
+    }
+  
+/**
+ * @summary Create task
+ */
+export const createTask = (
+    createTaskRequest: BodyType<CreateTaskRequest>,
+ options?: SecondParameter<typeof createInstance>,) => {
+      return createInstance<BoardResponse>(
+      {url: `/board/task/create`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createTaskRequest
+    },
+      options);
+    }
+  
 export type RegisterByLoginResult = NonNullable<Awaited<ReturnType<typeof registerByLogin>>>
 export type LoginResult = NonNullable<Awaited<ReturnType<typeof login>>>
 export type MeResult = NonNullable<Awaited<ReturnType<typeof me>>>
 export type GetFullBoardResult = NonNullable<Awaited<ReturnType<typeof getFullBoard>>>
 export type RenameTaskResult = NonNullable<Awaited<ReturnType<typeof renameTask>>>
+export type DeleteTaskResult = NonNullable<Awaited<ReturnType<typeof deleteTask>>>
+export type CreateTaskResult = NonNullable<Awaited<ReturnType<typeof createTask>>>

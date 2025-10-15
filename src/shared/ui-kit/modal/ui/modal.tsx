@@ -8,18 +8,40 @@ import { DialogDescription } from "@/shared/ui/dialog";
 import { DialogFooter } from "@/shared/ui/dialog";
 import { Label } from "@/shared/ui/label";
 import { Input } from "@/shared/ui/input";
-import { createContext, use, useId } from "react";
+import { createContext, use } from "react";
+import { FieldValues, UseFormReturn } from "react-hook-form";
 
-const ModalContext = createContext<{
+type ModalData<T extends FieldValues> = {
+  onSubmit: (data: T) => void;
+  form: UseFormReturn<T>;
+  columnId: string;
+};
+
+type ModalContextType<T extends FieldValues> = {
   id: string;
-}>({
+  open?: boolean;
+  data?: ModalData<T>;
+  onOpenChange?: (open: boolean) => void;
+};
+
+const ModalContext = createContext<ModalContextType<FieldValues>>({
   id: "",
+  open: false,
+  onOpenChange: () => {},
+  data: undefined,
 });
 
-export function Modal({ children }: { children: React.ReactNode }) {
-  const id = useId();
+export function Modal<T extends FieldValues>({
+  children,
+  data,
+}: {
+  children: React.ReactNode;
+  data?: ModalData<T>;
+}) {
   return (
-    <ModalContext.Provider value={{ id }}>
+    <ModalContext.Provider
+      value={{ id: "", data } as ModalContextType<FieldValues>}
+    >
       <Dialog>{children}</Dialog>
     </ModalContext.Provider>
   );
@@ -32,12 +54,21 @@ Modal.Content = function ModalContent({
   children: React.ReactNode;
   className?: string;
 }) {
+  const { data } = use(ModalContext);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (data?.form && data?.onSubmit) {
+      data.form.handleSubmit(data.onSubmit)(e);
+    }
+  };
+
   return (
-    <form>
-      <DialogContent className={cn("sm:max-w-[425px]", className)}>
+    <DialogContent className={cn("sm:max-w-[425px]", className)}>
+      <form onSubmit={handleSubmit}>
         <div className="grid gap-4">{children}</div>
-      </DialogContent>
-    </form>
+      </form>
+    </DialogContent>
   );
 };
 
@@ -67,23 +98,21 @@ Modal.Header = function ModalHeader({
 Modal.Input = function ModalInput({
   label,
   name,
-  value,
   className,
   ...restInputProps
 }: {
   label: string;
   name: string;
-  value: string;
   className?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>) {
-  const { id } = use(ModalContext);
+  const { id, data } = use(ModalContext);
+
   return (
     <div className={cn("grid gap-3", className)}>
       <Label htmlFor={`${id}-${name}`}>{label}</Label>
       <Input
         id={`${id}-${name}`}
-        name={name}
-        defaultValue={value}
+        {...data?.form?.register(name)}
         {...restInputProps}
       />
     </div>
