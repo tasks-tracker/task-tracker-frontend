@@ -16,14 +16,39 @@ import { AvatarFallback } from "@radix-ui/react-avatar";
 import { DialogClose } from "@/shared/ui/dialog";
 import { useUnit } from "effector-react";
 import { $$boardModel } from "../model/board.model";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export function TaskCard({ task }: { task: TaskType }) {
-  const { deleteTask } = useUnit({
+  const formSchema = z.object({
+    title: z.string().min(1, "Название задачи обязательно"),
+    description: z.string().min(1, "Описание задачи обязательно"),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    mode: "onChange",
+    defaultValues: {
+      title: task.title,
+      description: task.description,
+    },
+  });
+
+  const { deleteTask, updateTask } = useUnit({
     deleteTask: $$boardModel.output.taskDeleted,
+    updateTask: $$boardModel.output.taskUpdated,
   });
 
   const handleDeleteTask = () => {
     deleteTask({ taskId: task.id });
+  };
+
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    updateTask({
+      taskId: task.id,
+      ...data,
+    });
   };
 
   return (
@@ -32,7 +57,7 @@ export function TaskCard({ task }: { task: TaskType }) {
         <CardTitle className="text-base">{task.title}</CardTitle>
 
         <div className="flex gap-1">
-          <Modal>
+          <Modal data={{ onSubmit, form, columnId: task.columnId }}>
             <Modal.Trigger>
               <div className="h-6 w-6 inline-flex items-center justify-center rounded-md hover:bg-accent cursor-pointer transition-colors">
                 <Pencil className="h-3.5 w-3.5" />
@@ -48,14 +73,12 @@ export function TaskCard({ task }: { task: TaskType }) {
               <Modal.Input
                 label="Название"
                 name="title"
-                value={task.title}
                 placeholder="Введите название задачи"
               />
 
               <Modal.Input
                 label="Описание"
                 name="description"
-                value={task.description || ""}
                 placeholder="Введите описание задачи"
               />
 

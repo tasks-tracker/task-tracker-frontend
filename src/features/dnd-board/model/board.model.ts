@@ -7,6 +7,7 @@ import {
   DeleteTaskRequest,
   RenameTaskRequest,
   TaskType,
+  UpdateTaskRequest,
 } from "@/shared/api/generated";
 import { api } from "@/shared/api";
 
@@ -15,14 +16,14 @@ const $board = createStore<BoardResponseResult | null>(null);
 
 // Для удобства создадим маленькие сторы для колонок с задачами (это не обязательно, просто показываю что так тоже делают)
 const $columns = $board.map((board) => board?.columns || []);
-const $taskTitle = createStore<RenameTaskRequest | null>(null);
 const $task = createStore<TaskType | null>(null);
 
 const DashboardGate = createGate("DashboardGate");
 
-const taskTitleChanged = createEvent<RenameTaskRequest>();
+// Task events
 const taskDeleted = createEvent<DeleteTaskRequest>();
 const taskCreated = createEvent<CreateTaskRequest>();
+const taskUpdated = createEvent<UpdateTaskRequest>();
 
 // Тут я изменил на метод из api
 // Получение доски
@@ -32,15 +33,12 @@ const fetchBoardFx = createEffect(async (userId: string) => {
   });
 });
 
-// Изменение названия задачи
-const changeTaskTitleFx = createEffect(
-  async ({ taskId, newTitle }: RenameTaskRequest) => {
-    return await api.renameTask({
-      taskId,
-      newTitle,
-    });
-  },
-);
+// Изменение задачи
+const updateTaskFx = createEffect(async (data: UpdateTaskRequest) => {
+  return await api.updateTask({
+    ...data,
+  });
+});
 
 // Удаление задачи
 const deleteTaskFx = createEffect(async ({ taskId }: DeleteTaskRequest) => {
@@ -91,14 +89,6 @@ sample({
   target: $board,
 });
 
-sample({
-  clock: taskTitleChanged,
-  source: $taskTitle,
-  filter: Boolean,
-  fn: ({ newTitle, taskId }) => ({ newTitle: newTitle.trim(), taskId }),
-  target: changeTaskTitleFx,
-});
-
 // Удаление задачи
 sample({
   clock: taskDeleted,
@@ -130,7 +120,24 @@ sample({
   target: fetchBoardFx,
 });
 
+// Изменение задачи
+sample({
+  clock: taskUpdated,
+  fn: (data) => data,
+  target: updateTaskFx,
+});
+
+// После успешного изменения задачи обновляем доску
+sample({
+  clock: updateTaskFx.doneData,
+  source: $user,
+  filter: (user, data) => Boolean(user) && data.status === "SUCCESS",
+  fn: (user) => user!.id ?? "",
+  target: fetchBoardFx,
+});
+
 // Это нужно для того чтобы можно было использовать этот модуль в других модулях или компонентах
+// TODO: убрать effects
 export const $$boardModel = {
   output: {
     board: $board,
@@ -138,10 +145,11 @@ export const $$boardModel = {
     task: $task,
     taskDeleted,
     taskCreated,
-  },
-  effects: {
-    fetchBoardFx,
-    createTaskFx,
+    taskUpdated,
+    boardPending: fetchBoardFx.pending,
+    createTaskPending: createTaskFx.pending,
+    updateTaskPending: updateTaskFx.pending,
+    deleteTaskPending: deleteTaskFx.pending,
   },
   gates: {
     DashboardGate,

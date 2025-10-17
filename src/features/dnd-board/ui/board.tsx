@@ -11,7 +11,7 @@ export function Board() {
   const { columns, isLoading } = useUnit({
     board: $$boardModel.output.board,
     columns: $$boardModel.output.columns,
-    isLoading: $$boardModel.effects.fetchBoardFx.pending,
+    isLoading: $$boardModel.output.boardPending,
   });
 
   if (isLoading) return <p>Загрузка...</p>;

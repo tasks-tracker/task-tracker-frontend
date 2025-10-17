@@ -101,6 +101,20 @@ export interface CreateTaskRequest {
   userId: string;
 }
 
+export interface UpdateTaskRequest {
+  taskId?: string;
+  title?: string;
+  description?: string;
+  order?: number;
+  columnId?: string;
+  assigneeId?: string;
+}
+
+export interface TaskUpdateResponse {
+  status?: string;
+  message?: string;
+}
+
 export type RegisterByLogin200 = {
   success?: boolean;
   message?: string;
@@ -199,6 +213,18 @@ export const createTask = <TData = AxiosResponse<BoardResponse>>(
     );
   }
 
+/**
+ * @summary Update task
+ */
+export const updateTask = <TData = AxiosResponse<TaskUpdateResponse>>(
+    updateTaskRequest: UpdateTaskRequest, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.patch(
+      `/board/task/update`,
+      updateTaskRequest,options
+    );
+  }
+
 export type RegisterByLoginResult = AxiosResponse<RegisterByLogin200>
 export type LoginResult = AxiosResponse<Login200>
 export type MeResult = AxiosResponse<UserResponse>
@@ -206,3 +232,4 @@ export type GetFullBoardResult = AxiosResponse<BoardResponse>
 export type RenameTaskResult = AxiosResponse<BoardResponse>
 export type DeleteTaskResult = AxiosResponse<DeleteTaskResult>
 export type CreateTaskResult = AxiosResponse<BoardResponse>
+export type UpdateTaskResult = AxiosResponse<TaskUpdateResponse>
