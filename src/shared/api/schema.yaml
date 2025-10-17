@@ -220,6 +220,45 @@ paths:
               schema:
                 type: object
                 $ref: "#/components/schemas/Error"
+  /board/task/update:
+    patch:
+      operationId: updateTask
+      summary: Update task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTaskRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/TaskUpdateResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     RegisterByLoginRequest:
@@ -420,3 +459,25 @@ components:
         - description
         - columnId
         - userId
+    UpdateTaskRequest:
+      type: object
+      properties:
+        taskId:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        order:
+          type: integer
+        columnId:
+          type: string
+        assigneeId:
+          type: string
+    TaskUpdateResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string

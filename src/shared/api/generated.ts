@@ -97,6 +97,20 @@ export interface CreateTaskRequest {
   userId: string;
 }
 
+export interface UpdateTaskRequest {
+  taskId?: string;
+  title?: string;
+  description?: string;
+  order?: number;
+  columnId?: string;
+  assigneeId?: string;
+}
+
+export interface TaskUpdateResponse {
+  status?: string;
+  message?: string;
+}
+
 export type RegisterByLogin200 = {
   success?: boolean;
   message?: string;
@@ -209,6 +223,20 @@ export const createTask = (
       options);
     }
   
+/**
+ * @summary Update task
+ */
+export const updateTask = (
+    updateTaskRequest: BodyType<UpdateTaskRequest>,
+ options?: SecondParameter<typeof createInstance>,) => {
+      return createInstance<TaskUpdateResponse>(
+      {url: `/board/task/update`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateTaskRequest
+    },
+      options);
+    }
+  
 export type RegisterByLoginResult = NonNullable<Awaited<ReturnType<typeof registerByLogin>>>
 export type LoginResult = NonNullable<Awaited<ReturnType<typeof login>>>
 export type MeResult = NonNullable<Awaited<ReturnType<typeof me>>>
@@ -216,3 +244,4 @@ export type GetFullBoardResult = NonNullable<Awaited<ReturnType<typeof getFullBo
 export type RenameTaskResult = NonNullable<Awaited<ReturnType<typeof renameTask>>>
 export type DeleteTaskResult = NonNullable<Awaited<ReturnType<typeof deleteTask>>>
 export type CreateTaskResult = NonNullable<Awaited<ReturnType<typeof createTask>>>
+export type UpdateTaskResult = NonNullable<Awaited<ReturnType<typeof updateTask>>>
