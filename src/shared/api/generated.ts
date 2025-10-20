@@ -122,6 +122,15 @@ export interface CreateColumnResult {
   message: string;
 }
 
+export interface DeleteColumnRequest {
+  columnId: string;
+}
+
+export interface DeleteColumnResult {
+  status: string;
+  message: string;
+}
+
 export type RegisterByLogin200 = {
   success?: boolean;
   message?: string;
@@ -262,6 +271,20 @@ export const createColumn = (
       options);
     }
   
+/**
+ * @summary Remove column
+ */
+export const removeColumn = (
+    deleteColumnRequest: BodyType<DeleteColumnRequest>,
+ options?: SecondParameter<typeof createInstance>,) => {
+      return createInstance<DeleteColumnResult>(
+      {url: `/board/column/remove`, method: 'DELETE',
+      headers: {'Content-Type': 'application/json', },
+      data: deleteColumnRequest
+    },
+      options);
+    }
+  
 export type RegisterByLoginResult = NonNullable<Awaited<ReturnType<typeof registerByLogin>>>
 export type LoginResult = NonNullable<Awaited<ReturnType<typeof login>>>
 export type MeResult = NonNullable<Awaited<ReturnType<typeof me>>>
@@ -271,3 +294,4 @@ export type DeleteTaskResult = NonNullable<Awaited<ReturnType<typeof deleteTask>
 export type CreateTaskResult = NonNullable<Awaited<ReturnType<typeof createTask>>>
 export type UpdateTaskResult = NonNullable<Awaited<ReturnType<typeof updateTask>>>
 export type CreateColumnResult = NonNullable<Awaited<ReturnType<typeof createColumn>>>
+export type RemoveColumnResult = NonNullable<Awaited<ReturnType<typeof removeColumn>>>

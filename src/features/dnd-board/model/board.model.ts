@@ -5,6 +5,7 @@ import {
   BoardResponseResult,
   CreateColumnRequest,
   CreateTaskRequest,
+  DeleteColumnRequest,
   DeleteTaskRequest,
   TaskType,
   UpdateTaskRequest,
@@ -27,6 +28,7 @@ const taskUpdated = createEvent<UpdateTaskRequest>();
 
 // Column events
 const columnCreated = createEvent<CreateColumnRequest>();
+const columnDeleted = createEvent<DeleteColumnRequest>();
 
 // Тут я изменил на метод из api
 // Получение доски
@@ -64,6 +66,21 @@ const createColumnFx = createEffect(async (payload: CreateColumnRequest) => {
   });
 });
 
+// Удаение колонки
+const deleteColumnFx = createEffect(async (payload: DeleteColumnRequest) => {
+  return await api.removeColumn({
+    ...payload,
+  });
+});
+
+// После успешного удаления колонки обновляем доску
+sample({
+  clock: deleteColumnFx.doneData,
+  source: $user,
+  filter: (user, data) => Boolean(user) && data.status === "SUCCESS",
+  fn: (user) => user!.id ?? "",
+  target: fetchBoardFx,
+});
 // Тут прогон такой, шо
 // 1. Крче useGate это как useEffect только нужен для синхронизациии жизненного цикла компонента с эффектором,
 // когда срабатывает событие open, то запускается прогон собственно
@@ -162,6 +179,21 @@ sample({
   target: fetchBoardFx,
 });
 
+// Удаление колонки
+sample({
+  clock: columnDeleted,
+  fn: (payload) => payload,
+  target: deleteColumnFx,
+});
+
+sample({
+  clock: deleteColumnFx.doneData,
+  source: $user,
+  filter: (user, data) => Boolean(user) && data.status === "SUCCESS",
+  fn: (user) => user!.id ?? "",
+  target: fetchBoardFx,
+});
+
 // Это нужно для того чтобы можно было использовать этот модуль в других модулях или компонентах
 // TODO: убрать effects
 export const $$boardModel = {
@@ -173,11 +205,13 @@ export const $$boardModel = {
     taskCreated,
     taskUpdated,
     columnCreated,
+    columnDeleted,
     boardPending: fetchBoardFx.pending,
     createTaskPending: createTaskFx.pending,
     updateTaskPending: updateTaskFx.pending,
     deleteTaskPending: deleteTaskFx.pending,
     createColumnPending: createColumnFx.pending,
+    deleteColumnPending: deleteColumnFx.pending,
   },
   gates: {
     DashboardGate,

@@ -298,6 +298,45 @@ paths:
               schema:
                 type: object
                 $ref: "#/components/schemas/Error"
+  /board/column/remove:
+    delete:
+      operationId: removeColumn
+      summary: Remove column
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteColumnRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/DeleteColumnResult"
+      "401":
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Error"
+      "403":
+        description: Forbidden
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Error"
+      "404":
+        description: Not Found
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Error"
 components:
   schemas:
     RegisterByLoginRequest:
@@ -534,6 +573,23 @@ components:
         - boardId
         - order
     CreateColumnResult:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+      required:
+        - status
+        - message
+    DeleteColumnRequest:
+      type: object
+      properties:
+        columnId:
+          type: string
+      required:
+        - columnId
+    DeleteColumnResult:
       type: object
       properties:
         status:
