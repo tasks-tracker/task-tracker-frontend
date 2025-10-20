@@ -126,6 +126,15 @@ export interface CreateColumnResult {
   message: string;
 }
 
+export interface DeleteColumnRequest {
+  columnId: string;
+}
+
+export interface DeleteColumnResult {
+  status: string;
+  message: string;
+}
+
 export type RegisterByLogin200 = {
   success?: boolean;
   message?: string;
@@ -248,6 +257,18 @@ export const createColumn = <TData = AxiosResponse<CreateColumnResult>>(
     );
   }
 
+/**
+ * @summary Remove column
+ */
+export const removeColumn = <TData = AxiosResponse<DeleteColumnResult>>(
+    deleteColumnRequest: DeleteColumnRequest, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.delete(
+      `/board/column/remove`,{data:
+      deleteColumnRequest, ...options}
+    );
+  }
+
 export type RegisterByLoginResult = AxiosResponse<RegisterByLogin200>
 export type LoginResult = AxiosResponse<Login200>
 export type MeResult = AxiosResponse<UserResponse>
@@ -257,3 +278,4 @@ export type DeleteTaskResult = AxiosResponse<DeleteTaskResult>
 export type CreateTaskResult = AxiosResponse<BoardResponse>
 export type UpdateTaskResult = AxiosResponse<TaskUpdateResponse>
 export type CreateColumnResult = AxiosResponse<CreateColumnResult>
+export type RemoveColumnResult = AxiosResponse<DeleteColumnResult>
