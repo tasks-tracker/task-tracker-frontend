@@ -14,7 +14,7 @@ import { FieldValues, UseFormReturn } from "react-hook-form";
 type ModalData<T extends FieldValues> = {
   onSubmit: (data: T) => void;
   form: UseFormReturn<T>;
-  columnId: string;
+  columnId?: string;
 };
 
 type ModalContextType<T extends FieldValues> = {

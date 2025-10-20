@@ -111,6 +111,17 @@ export interface TaskUpdateResponse {
   message?: string;
 }
 
+export interface CreateColumnRequest {
+  title: string;
+  boardId: string;
+  order: number;
+}
+
+export interface CreateColumnResult {
+  status: string;
+  message: string;
+}
+
 export type RegisterByLogin200 = {
   success?: boolean;
   message?: string;
@@ -237,6 +248,20 @@ export const updateTask = (
       options);
     }
   
+/**
+ * @summary Create column
+ */
+export const createColumn = (
+    createColumnRequest: BodyType<CreateColumnRequest>,
+ options?: SecondParameter<typeof createInstance>,) => {
+      return createInstance<CreateColumnResult>(
+      {url: `/board/column/create`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createColumnRequest
+    },
+      options);
+    }
+  
 export type RegisterByLoginResult = NonNullable<Awaited<ReturnType<typeof registerByLogin>>>
 export type LoginResult = NonNullable<Awaited<ReturnType<typeof login>>>
 export type MeResult = NonNullable<Awaited<ReturnType<typeof me>>>
@@ -245,3 +270,4 @@ export type RenameTaskResult = NonNullable<Awaited<ReturnType<typeof renameTask>
 export type DeleteTaskResult = NonNullable<Awaited<ReturnType<typeof deleteTask>>>
 export type CreateTaskResult = NonNullable<Awaited<ReturnType<typeof createTask>>>
 export type UpdateTaskResult = NonNullable<Awaited<ReturnType<typeof updateTask>>>
+export type CreateColumnResult = NonNullable<Awaited<ReturnType<typeof createColumn>>>

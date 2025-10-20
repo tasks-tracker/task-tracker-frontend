@@ -115,6 +115,17 @@ export interface TaskUpdateResponse {
   message?: string;
 }
 
+export interface CreateColumnRequest {
+  title: string;
+  boardId: string;
+  order: number;
+}
+
+export interface CreateColumnResult {
+  status: string;
+  message: string;
+}
+
 export type RegisterByLogin200 = {
   success?: boolean;
   message?: string;
@@ -225,6 +236,18 @@ export const updateTask = <TData = AxiosResponse<TaskUpdateResponse>>(
     );
   }
 
+/**
+ * @summary Create column
+ */
+export const createColumn = <TData = AxiosResponse<CreateColumnResult>>(
+    createColumnRequest: CreateColumnRequest, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `/board/column/create`,
+      createColumnRequest,options
+    );
+  }
+
 export type RegisterByLoginResult = AxiosResponse<RegisterByLogin200>
 export type LoginResult = AxiosResponse<Login200>
 export type MeResult = AxiosResponse<UserResponse>
@@ -233,3 +256,4 @@ export type RenameTaskResult = AxiosResponse<BoardResponse>
 export type DeleteTaskResult = AxiosResponse<DeleteTaskResult>
 export type CreateTaskResult = AxiosResponse<BoardResponse>
 export type UpdateTaskResult = AxiosResponse<TaskUpdateResponse>
+export type CreateColumnResult = AxiosResponse<CreateColumnResult>

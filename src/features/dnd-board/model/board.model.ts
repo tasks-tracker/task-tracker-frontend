@@ -3,9 +3,9 @@ import { createGate } from "effector-react";
 import { $user } from "@/entities/user";
 import {
   BoardResponseResult,
+  CreateColumnRequest,
   CreateTaskRequest,
   DeleteTaskRequest,
-  RenameTaskRequest,
   TaskType,
   UpdateTaskRequest,
 } from "@/shared/api/generated";
@@ -24,6 +24,9 @@ const DashboardGate = createGate("DashboardGate");
 const taskDeleted = createEvent<DeleteTaskRequest>();
 const taskCreated = createEvent<CreateTaskRequest>();
 const taskUpdated = createEvent<UpdateTaskRequest>();
+
+// Column events
+const columnCreated = createEvent<CreateColumnRequest>();
 
 // Тут я изменил на метод из api
 // Получение доски
@@ -51,6 +54,13 @@ const deleteTaskFx = createEffect(async ({ taskId }: DeleteTaskRequest) => {
 const createTaskFx = createEffect(async (task: CreateTaskRequest) => {
   return await api.createTask({
     ...task,
+  });
+});
+
+// Создание колонки
+const createColumnFx = createEffect(async (payload: CreateColumnRequest) => {
+  return await api.createColumn({
+    ...payload,
   });
 });
 
@@ -136,6 +146,22 @@ sample({
   target: fetchBoardFx,
 });
 
+// Создание колонки
+sample({
+  clock: columnCreated,
+  fn: (payload) => payload,
+  target: createColumnFx,
+});
+
+// После успешного изменения задачи обновляем доску
+sample({
+  clock: createColumnFx.doneData,
+  source: $user,
+  filter: (user, data) => Boolean(user) && data.status === "SUCCESS",
+  fn: (user) => user!.id ?? "",
+  target: fetchBoardFx,
+});
+
 // Это нужно для того чтобы можно было использовать этот модуль в других модулях или компонентах
 // TODO: убрать effects
 export const $$boardModel = {
@@ -146,10 +172,12 @@ export const $$boardModel = {
     taskDeleted,
     taskCreated,
     taskUpdated,
+    columnCreated,
     boardPending: fetchBoardFx.pending,
     createTaskPending: createTaskFx.pending,
     updateTaskPending: updateTaskFx.pending,
     deleteTaskPending: deleteTaskFx.pending,
+    createColumnPending: createColumnFx.pending,
   },
   gates: {
     DashboardGate,
